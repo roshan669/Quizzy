@@ -32,6 +32,13 @@
           "resizeMode": "contain",
           "backgroundColor": "#ffffff"
         }
+      ],
+      "expo-video",
+      [
+        "expo-font",
+        {
+          "fonts": ["./assets/fonts/myfont.ttf"]
+        }
       ]
     ],
     "experiments": {

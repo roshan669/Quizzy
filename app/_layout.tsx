@@ -5,10 +5,8 @@ import { StatusBar } from "react-native";
 export const Layout: React.FC = () => {
   return (
     <Stack>
-      <Stack.Screen
-        name="index"
-        options={{ title: "Topics", headerTitleAlign: "center" }}
-      />
+      <Stack.Screen name="index" options={{ headerShown: false }} />
+      <Stack.Screen name="home" options={{ headerShown: false }} />
     </Stack>
   );
 };
@@ -16,7 +14,11 @@ export const Layout: React.FC = () => {
 export default function RootLayout() {
   return (
     <PreferProvider>
-      <StatusBar barStyle={"dark-content"} />
+      <StatusBar
+        barStyle={"dark-content"}
+        backgroundColor={"transparent"}
+        translucent={true}
+      />
       <Layout />
     </PreferProvider>
   );

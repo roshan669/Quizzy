@@ -1,223 +1,108 @@
-import React, { useState, useRef, useEffect } from "react";
-import { usePreferContext } from "../context/usePerference";
-import {
-  StyleSheet,
-  View,
-  Text,
-  ScrollView,
-  TouchableOpacity,
-  Modal,
-  Animated, // Import Animated
-} from "react-native";
-import { categories } from "@/constants/Categories";
-import { SafeAreaView } from "react-native-safe-area-context";
-import Card from "@/components/card";
+import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import React from "react";
+import { useVideoPlayer, VideoView, VideoSource } from "expo-video";
+import Icon from "@expo/vector-icons/MaterialCommunityIcons";
+import { Link } from "expo-router";
+import { useRouter } from "expo-router";
+const assetId = require("../assets/start.mp4");
 
-import Icon from "@expo/vector-icons/MaterialIcons";
-import { url } from "@/constants/Url";
-
-const MyComponent: React.FC = () => {
-  const { setData, data } = usePreferContext();
-  const [difficulty, setDifficulty] = useState<"easy" | "medium" | "hard">(
-    "easy"
-  );
-  const [category, setCategory] = useState(0);
-  const [modalVisible, setModalVisible] = useState(false);
-
-  const backdropOpacity = useRef(new Animated.Value(0)).current; // For smooth transitions
-  const modalScale = useRef(new Animated.Value(0)).current; // For scaling modal
-
-  const animateBackdrop = (visible: boolean) => {
-    Animated.timing(backdropOpacity, {
-      toValue: visible ? 1 : 0,
-      duration: 1, // Adjust duration as needed
-      useNativeDriver: true, // For better performance
-    }).start();
+export default function index() {
+  const router = useRouter();
+  const videoSource: VideoSource = {
+    assetId,
+    metadata: {
+      title: "startscr",
+      artist: "roshan",
+    },
   };
 
-  const animateModal = (visible: boolean) => {
-    Animated.spring(modalScale, {
-      toValue: visible ? 1 : 0, // 0 for hidden, 1 for visible
-      useNativeDriver: true,
-      bounciness: 5, // Adjust bounce effect
-      speed: 5,
-    }).start();
-  };
+  const player = useVideoPlayer(videoSource, (player) => {
+    player.loop = true;
+    player.play();
+  });
 
-  const handleFetchQuestions = async () => {
-    try {
-      let apiUrl = `${url}difficulty=${difficulty}&type=multiple`;
-      if (category !== 0) {
-        apiUrl += `&category=${category}`;
-      }
-
-      const response = await fetch(apiUrl);
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      const result = await response.json();
-
-      setData((prevData) => result.results);
-    } catch (error) {
-      console.error("Error fetching questions:", error);
-    }
+  const handlePress = () => {
+    router.replace("/home");
   };
 
   return (
-    <SafeAreaView style={styles.background}>
-      <ScrollView>
-        <Modal
-          animationType="none" // Disable default animation
-          visible={modalVisible}
-          onRequestClose={() => {
-            setModalVisible(false);
-            animateBackdrop(false);
-            animateModal(false);
-          }}
-          transparent={true}
+    <View style={styles.container}>
+      <View style={styles.videoContainer}>
+        <VideoView
+          style={styles.video}
+          player={player}
+          contentFit={"cover"} // Or "contain", "stretch" as needed
+          nativeControls={false}
+        />
+        <View style={styles.overlay}>
+          <Icon name="lightbulb-on-outline" size={50} />
+          <Text style={styles.overlayText}>Quizzy</Text>
+          <Text></Text>
+        </View>
+        <TouchableOpacity
+          onPress={handlePress}
+          style={[styles.overlay, { top: 530, left: 0, right: 0, bottom: 0 }]}
         >
-          <View style={styles.modalBackdrop}>
-            <Animated.View style={{ opacity: backdropOpacity }} />
-
-            <Animated.View
-              style={[
-                styles.modalContainer,
-                { transform: [{ scale: modalScale }] },
-              ]}
-            >
-              <Text
-                style={{
-                  textAlign: "center",
-                  fontSize: 25,
-                  marginTop: 50,
-                  fontWeight: "bold",
-                }}
-              >
-                Choose Difficulty
-              </Text>
-              <View style={styles.modalContent}>
-                <TouchableOpacity
-                  style={[
-                    styles.modalbutton,
-
-                    difficulty == "easy" && {
-                      elevation: 10,
-                    },
-                  ]}
-                  onPress={() => setDifficulty("easy")}
-                >
-                  <Text>Easy</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={[
-                    styles.modalbutton,
-
-                    difficulty == "medium" && {
-                      elevation: 10,
-                    },
-                  ]}
-                  onPress={() => setDifficulty("medium")}
-                >
-                  <Text>Medium</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={[
-                    styles.modalbutton,
-
-                    difficulty == "hard" && {
-                      elevation: 10,
-                    },
-                  ]}
-                  onPress={() => {
-                    setDifficulty("hard");
-                  }}
-                >
-                  <Text>Hard</Text>
-                </TouchableOpacity>
-              </View>
-              <TouchableOpacity
-                style={[
-                  styles.modalbutton,
-                  {
-                    marginBottom: 30,
-
-                    width: 100,
-                    gap: 2,
-                    elevation: 10,
-                  },
-                ]}
-                onPress={handleFetchQuestions}
-              >
-                <Text style={{ fontWeight: "semibold", fontSize: 15 }}>
-                  Next
-                </Text>
-                <Icon name="navigate-next" size={23}></Icon>
-              </TouchableOpacity>
-            </Animated.View>
-          </View>
-        </Modal>
-
-        {categories.map((category) => (
-          <TouchableOpacity
-            key={category.id}
-            onPress={() => {
-              setCategory(parseInt(category.id));
-              setModalVisible(true);
-              animateBackdrop(true);
-              animateModal(true);
-            }}
+          <Text style={styles.button}>Play</Text>
+        </TouchableOpacity>
+        <Link
+          style={[styles.overlay, { top: 730, left: 0, right: 0, bottom: 0 }]}
+          href={"https://github.com/roshan669"}
+        >
+          <Text
+            style={{ textAlign: "center", fontFamily: "my-font", fontSize: 20 }}
           >
-            <Card title={category.name} />
-          </TouchableOpacity>
-        ))}
-      </ScrollView>
-    </SafeAreaView>
+            <Icon name="github" size={20}></Icon>
+            Roshan
+          </Text>
+        </Link>
+      </View>
+    </View>
   );
-};
+}
 
 const styles = StyleSheet.create({
-  background: {
+  container: {
     flex: 1,
+    justifyContent: "center", // Center vertically
+    alignItems: "center", // Center horizontally
   },
-  modalBackdrop: {
+  loadingContainer: {
+    // Style for the loading indicator
     flex: 1,
-    position: "absolute",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  videoContainer: {
+    width: 350,
+    height: 800, // Or whatever height you want
+  },
+  video: {
+    flex: 1, // Important: Video should take up the full container
+    marginBottom: 100,
+  },
+  overlay: {
+    position: "absolute", // Key for overlay
     top: 0,
     left: 0,
     right: 0,
-    bottom: 0,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
+    bottom: 400,
+    justifyContent: "center", // Center content vertically
+    alignItems: "center", // Center content horizontally
   },
-  modalContainer: {
-    flexDirection: "column",
-    backgroundColor: "#d1d1d1",
-    borderRadius: 10,
-    width: "85%",
-    transform: [{ scale: 0 }], // Initial scale for animation
-    justifyContent: "center",
-    alignContent: "center",
-    alignItems: "center",
-    elevation: 10,
+  overlayText: {
+    fontSize: 50,
+    fontFamily: "my-font",
   },
-  modalContent: {
-    flexDirection: "row",
-    padding: 20,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-
-  modalbutton: {
-    backgroundColor: "#d5d5d5",
-    flexDirection: "row",
-    width: 80,
-    height: 50,
-    justifyContent: "center",
-    alignItems: "center",
-    margin: 5,
-    borderRadius: 12,
+  button: {
+    backgroundColor: "#001111",
+    color: "#FFF",
+    padding: 10,
+    borderRadius: 20,
+    width: 125,
+    textAlign: "center",
+    elevation: 5,
+    fontSize: 15,
+    fontWeight: "bold",
   },
 });
-
-export default MyComponent;

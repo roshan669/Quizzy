@@ -1,37 +1,28 @@
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, ViewStyle } from "react-native";
 import React from "react";
 
 interface propType {
   title: string; // Use lowercase 'string'
+  stylepar: ViewStyle;
 }
 
-const Card: React.FC<propType> = ({ title }) => {
+const Card: React.FC<propType> = ({ title, stylepar }) => {
   return (
-    <View style={styles.container}>
-      <Text>{title}</Text>
+    <View style={[styles.container, stylepar]}>
+      <Text style={{ flex: 1, width: 100 }}>{title}</Text>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "white", // Example background color
-    padding: 10, // Example padding
-    borderRadius: 8, // Example border radius
-    elevation: 2, // For Android shadow (elevation)
-    shadowColor: "#000", // For iOS shadow (shadowColor, shadowOffset, shadowOpacity, shadowRadius)
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 4,
-    marginBottom: 10, // Space between cards
+    backgroundColor: "white",
     height: 60,
-    alignItems: "center",
-    justifyContent: "center",
+    width: 150,
   },
   text: {
-    // Style the text within the card
     fontSize: 16,
-    fontWeight: "500",
+    fontWeight: "bold",
     color: "black",
   },
 });
