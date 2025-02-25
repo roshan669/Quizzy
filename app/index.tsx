@@ -1,10 +1,11 @@
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
-import React from "react";
+import React, { useEffect } from "react";
 import { useVideoPlayer, VideoView, VideoSource } from "expo-video";
 import Icon from "@expo/vector-icons/MaterialCommunityIcons";
-import { Link } from "expo-router";
+import { Link, Redirect } from "expo-router";
 import { useRouter } from "expo-router";
 const assetId = require("../assets/start.mp4");
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function index() {
   const router = useRouter();
@@ -21,9 +22,20 @@ export default function index() {
     player.play();
   });
 
-  const handlePress = () => {
+  const handlePress = async () => {
+    await AsyncStorage.setItem("firstTime", "true");
     router.replace("/home");
   };
+
+  useEffect(() => {
+    const checkFirstTime = async () => {
+      const firstTime = await AsyncStorage.getItem("firstTime");
+      if (firstTime) {
+        router.replace("/home");
+      }
+    };
+    checkFirstTime();
+  }, []);
 
   return (
     <View style={styles.container}>

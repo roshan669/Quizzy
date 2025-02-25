@@ -7,7 +7,9 @@ import {
   ScrollView,
   TouchableOpacity,
   Modal,
-  Animated, // Import Animated
+  Animated,
+  ActivityIndicator,
+  ToastAndroid, // Import Animated
 } from "react-native";
 import { categories } from "@/constants/Categories";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -15,6 +17,8 @@ import Card from "@/components/card";
 
 import Icon from "@expo/vector-icons/MaterialIcons";
 import { url } from "@/constants/Url";
+import { router } from "expo-router";
+import he from "he";
 
 const MyComponent: React.FC = () => {
   const { setData } = usePreferContext();
@@ -23,6 +27,7 @@ const MyComponent: React.FC = () => {
   );
   const [category, setCategory] = useState(0);
   const [modalVisible, setModalVisible] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const backdropOpacity = useRef(new Animated.Value(0)).current; // For smooth transitions
   const modalScale = useRef(new Animated.Value(0)).current; // For scaling modal
@@ -46,6 +51,7 @@ const MyComponent: React.FC = () => {
 
   const handleFetchQuestions = async () => {
     try {
+      setLoading(true);
       let apiUrl = `${url}difficulty=${difficulty}&type=multiple`;
       if (category !== 0) {
         apiUrl += `&category=${category}`;
@@ -57,9 +63,14 @@ const MyComponent: React.FC = () => {
       }
       const result = await response.json();
 
-      setData((prevData) => result.results);
+      setData(result.results);
+      setModalVisible(!modalVisible);
+      setLoading(false);
+      router.push("/qna");
     } catch (error) {
-      console.error("Error fetching questions:", error);
+      ToastAndroid.show("error fetching questions", 10);
+      console.error("Error fetching questions", error);
+      setLoading(false);
     }
   };
 
@@ -84,11 +95,17 @@ const MyComponent: React.FC = () => {
               { transform: [{ scale: modalScale }] },
             ]}
           >
+            <TouchableOpacity
+              style={styles.close}
+              onPress={() => setModalVisible(!modalVisible)}
+            >
+              <Icon name="close" size={32} />
+            </TouchableOpacity>
+
             <Text
               style={{
                 textAlign: "center",
                 fontSize: 25,
-                marginTop: 50,
                 fontWeight: "bold",
               }}
             >
@@ -147,8 +164,11 @@ const MyComponent: React.FC = () => {
               ]}
               onPress={handleFetchQuestions}
             >
-              <Text style={{ fontWeight: "semibold", fontSize: 15 }}>Next</Text>
-              <Icon name="navigate-next" size={23}></Icon>
+              {loading ? (
+                <ActivityIndicator color={"#000"} />
+              ) : (
+                <Icon name="navigate-next" size={30}></Icon>
+              )}
             </TouchableOpacity>
           </Animated.View>
         </View>
@@ -199,6 +219,9 @@ const MyComponent: React.FC = () => {
 const styles = StyleSheet.create({
   background: {
     flex: 1,
+  },
+  close: {
+    margin: 25,
   },
   modalBackdrop: {
     flex: 1,
