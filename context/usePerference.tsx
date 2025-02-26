@@ -1,10 +1,4 @@
-import React, {
-  createContext,
-  useState,
-  useCallback,
-  ReactNode,
-  useContext,
-} from "react";
+import React, { createContext, useState, ReactNode, useContext } from "react";
 
 interface Question {
   category: string;
@@ -18,20 +12,25 @@ interface Question {
 interface PreferContextType {
   data: Question[]; // Use the Question type here
   setData: React.Dispatch<React.SetStateAction<Question[]>>; // Type for setData
+  score: number;
+  setScore: React.Dispatch<React.SetStateAction<number>>;
 }
 
 const PreferContext = createContext<PreferContextType>({
   data: [], // Initialize as an empty array
   setData: () => {}, // Correct type for setData
+  score: 0,
+  setScore: () => {},
 });
 
 export const PreferProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
   const [data, setData] = useState<Question[]>([]); // Use Question[] here as well
+  const [score, setScore] = useState<number>(0);
 
   return (
-    <PreferContext.Provider value={{ data, setData }}>
+    <PreferContext.Provider value={{ data, setData, score, setScore }}>
       {children}
     </PreferContext.Provider>
   );

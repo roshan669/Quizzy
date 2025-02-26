@@ -12,7 +12,6 @@ import {
   ToastAndroid, // Import Animated
 } from "react-native";
 import { categories } from "@/constants/Categories";
-import { SafeAreaView } from "react-native-safe-area-context";
 import Card from "@/components/card";
 
 import Icon from "@expo/vector-icons/MaterialIcons";

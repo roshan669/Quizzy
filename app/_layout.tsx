@@ -1,6 +1,6 @@
 import { PreferProvider } from "@/context/usePerference";
 import { Stack } from "expo-router";
-import { StatusBar } from "react-native";
+import { Modal, StatusBar } from "react-native";
 
 export const Layout: React.FC = () => {
   return (
@@ -8,6 +8,13 @@ export const Layout: React.FC = () => {
       <Stack.Screen name="index" options={{ headerShown: false }} />
       <Stack.Screen name="home" options={{ headerShown: false }} />
       <Stack.Screen name="qna" options={{ headerShown: false }} />
+      <Stack.Screen
+        name="result"
+        options={{
+          headerShown: false,
+          presentation: "modal",
+        }}
+      />
     </Stack>
   );
 };
