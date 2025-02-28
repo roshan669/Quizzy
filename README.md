@@ -1,6 +1,50 @@
-# Welcome to your Expo app 👋
+# Quizzy App
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+Welcome to Quizzy, a fun and interactive quiz application built with React Native and Expo. This app allows users to select a category and difficulty level to answer multiple-choice questions.
+
+## About the App
+
+Quizzy is designed to provide an engaging quiz experience with the following features:
+
+- **Category Selection**: Users can choose from various categories to answer questions.
+- **Difficulty Levels**: Users can select the difficulty level (easy, medium, hard) for the questions.
+- **Animated Modals**: Smooth animations for modals to enhance user experience.
+- **Real-time Feedback**: Users receive real-time feedback on their answers.
+
+## Technologies Used
+
+This app is built using the following technologies and libraries:
+
+- **React Native**: A framework for building native apps using React.
+- **Expo**: A platform for making universal React applications.
+- **TypeScript**: A typed superset of JavaScript that compiles to plain JavaScript.
+- **React Navigation**: For handling navigation within the app.
+- **Expo Vector Icons**: For using vector icons in the app.
+- **Expo Video**: For handling video playback in the app.
+- **Expo Haptics**: For providing haptic feedback.
+- **Expo File System**: For handling file system operations.
+- **Expo Constants**: For accessing system constants.
+- **Expo Font**: For loading custom fonts.
+- **Expo Blur**: For adding blur effects.
+- **Expo Keep Awake**: For preventing the screen from sleeping.
+- **Expo Linking**: For handling deep links.
+- **Expo Splash Screen**: For customizing the splash screen.
+- **Expo System UI**: For managing system UI settings.
+- **React Native Gesture Handler**: For handling gestures in the app.
+- **React Native Reanimated**: For creating smooth animations.
+- **React Native Safe Area Context**: For handling safe area insets.
+- **React Native Screens**: For optimizing screen transitions.
+- **React Native WebView**: For rendering web content.
+
+## Getting Started
+
+To get started with developing this app, follow these steps:
+
+1. **Install dependencies**
+
+   ```bash
+   npm install
+   ```
 
 ## Get started
 
@@ -15,36 +59,3 @@ This is an [Expo](https://expo.dev) project created with [`create-expo-app`](htt
    ```bash
     npx expo start
    ```
-
-In the output, you'll find options to open the app in a
-
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
-
-```bash
-npm run reset-project
-```
-
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
-
-## Learn more
-
-To learn more about developing your project with Expo, look at the following resources:
-
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
