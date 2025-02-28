@@ -13,10 +13,9 @@ export default function qna() {
   const [answers, setAnswers] = useState<string[]>([]);
   const [selected, setSelected] = useState<boolean>();
   const [selectedAnswer, setSelectedAnswer] = useState<string>("");
+  const [correctAns, setCorrectAns] = useState<string>("");
 
   const router = useRouter();
-
-  // console.log(data);
 
   useEffect(() => {
     if (data && data.length > 0) {
@@ -28,6 +27,12 @@ export default function qna() {
           .replaceAll(/&amp;/g, "&")
       );
     }
+    setCorrectAns(
+      data[currQ].correct_answer
+        .replaceAll(/&quot;/g, '"')
+        .replaceAll(/&#039;/g, "'")
+        .replaceAll(/&amp;/g, "&")
+    );
   }, [currQ]); // Shuffle when data changes or current question changes
 
   const shuffleAnswers = () => {
@@ -36,13 +41,15 @@ export default function qna() {
       const allAnswers = [
         ...currentQuestion.incorrect_answers,
         currentQuestion.correct_answer,
-      ];
-      // Fisher-Yates shuffle algorithm for randomizing array elements
-      for (let i = allAnswers.length - 1; i > 0; i--) {
-        allAnswers[i] = allAnswers[i]
+      ].map((answer) =>
+        answer
           .replaceAll(/&#039;/g, "'")
           .replaceAll(/&amp;/g, "&")
-          .replaceAll(/&quot;/g, '"');
+          .replaceAll(/&quot;/g, '"')
+      );
+
+      // Fisher-Yates shuffle algorithm for randomizing array elements
+      for (let i = allAnswers.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
         [allAnswers[i], allAnswers[j]] = [allAnswers[j], allAnswers[i]];
       }
@@ -54,7 +61,7 @@ export default function qna() {
     if (selected) return;
     setSelectedAnswer(selectedAnswer);
     setSelected(true);
-    if (selectedAnswer !== data[currQ].correct_answer) {
+    if (selectedAnswer !== correctAns) {
       Haptics.notificationAsync(Haptics.NotificationFeedbackType.Warning);
 
       return;
@@ -77,7 +84,7 @@ export default function qna() {
       return;
     }
 
-    router.push("/result");
+    router.replace("/result");
   };
   return (
     <SafeAreaView style={styles.container}>
@@ -88,12 +95,10 @@ export default function qna() {
         style={[
           styles.answer,
 
-          selected && answers[0] === data[currQ].correct_answer
+          selected && answers[0] === correctAns
             ? { backgroundColor: "green" }
             : {},
-          selected &&
-          answers[0] !== data[currQ].correct_answer &&
-          selectedAnswer === answers[0]
+          selected && answers[0] !== correctAns && selectedAnswer === answers[0]
             ? { backgroundColor: "red" }
             : {},
         ]}
@@ -106,12 +111,10 @@ export default function qna() {
         style={[
           styles.answer,
 
-          selected && answers[1] === data[currQ].correct_answer
+          selected && answers[1] === correctAns
             ? { backgroundColor: "green" }
             : {},
-          selected &&
-          answers[1] !== data[currQ].correct_answer &&
-          selectedAnswer === answers[1]
+          selected && answers[1] !== correctAns && selectedAnswer === answers[1]
             ? { backgroundColor: "red" }
             : {},
         ]}
@@ -124,12 +127,10 @@ export default function qna() {
         style={[
           styles.answer,
 
-          selected && answers[2] === data[currQ].correct_answer
+          selected && answers[2] === correctAns
             ? { backgroundColor: "green" }
             : {},
-          selected &&
-          answers[2] !== data[currQ].correct_answer &&
-          selectedAnswer === answers[2]
+          selected && answers[2] !== correctAns && selectedAnswer === answers[2]
             ? { backgroundColor: "red" }
             : {},
         ]}
@@ -142,14 +143,10 @@ export default function qna() {
         style={[
           styles.answer,
 
-          selected &&
-          answers[3] === data[currQ].correct_answer &&
-          selectedAnswer === answers[3]
+          selected && answers[3] === correctAns
             ? { backgroundColor: "green" }
             : {},
-          selected &&
-          answers[3] !== data[currQ].correct_answer &&
-          selectedAnswer === answers[3]
+          selected && answers[3] !== correctAns && selectedAnswer === answers[3]
             ? { backgroundColor: "red" }
             : {},
         ]}
@@ -197,7 +194,7 @@ const styles = StyleSheet.create({
   },
   nextbtn: {
     backgroundColor: "#d9d9d9",
-    width: 100,
+    width: 130,
     height: 50,
     alignItems: "center",
     justifyContent: "center",

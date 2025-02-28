@@ -9,7 +9,7 @@ interface propType {
 const Card: React.FC<propType> = ({ title, stylepar }) => {
   return (
     <View style={[styles.container, stylepar]}>
-      <Text style={{ flex: 1, width: 100 }}>{title}</Text>
+      <Text style={styles.text}>{title}</Text>
     </View>
   );
 };
@@ -21,9 +21,12 @@ const styles = StyleSheet.create({
     width: 150,
   },
   text: {
-    fontSize: 16,
-    fontWeight: "bold",
-    color: "black",
+    flex: 1,
+    width: 100,
+    fontWeight: "600",
+    fontSize: 13,
+    textAlign: "center",
+    textAlignVertical: "center",
   },
 });
 

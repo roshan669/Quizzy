@@ -17,10 +17,9 @@ import Card from "@/components/card";
 import Icon from "@expo/vector-icons/MaterialIcons";
 import { url } from "@/constants/Url";
 import { router } from "expo-router";
-import he from "he";
 
 const MyComponent: React.FC = () => {
-  const { setData } = usePreferContext();
+  const { setData, setUrl } = usePreferContext();
   const [difficulty, setDifficulty] = useState<"easy" | "medium" | "hard">(
     "easy"
   );
@@ -55,20 +54,30 @@ const MyComponent: React.FC = () => {
       if (category !== 0) {
         apiUrl += `&category=${category}`;
       }
+      console.log(apiUrl);
+      setUrl(apiUrl);
 
       const response = await fetch(apiUrl);
       if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+        ToastAndroid.show(`something went wrong, please try again`, 10);
+        setLoading(false);
+        setModalVisible(false);
+        return;
       }
       const result = await response.json();
 
+      if (result.response_code) {
+        ToastAndroid.show("something went wrong !!!", 10);
+        setLoading(false);
+        setModalVisible(false);
+        return;
+      }
       setData(result.results);
       setModalVisible(!modalVisible);
       setLoading(false);
       router.push("/qna");
     } catch (error) {
-      ToastAndroid.show("error fetching questions", 10);
-      console.error("Error fetching questions", error);
+      ToastAndroid.show("check your internet connection!", 10);
       setLoading(false);
     }
   };
@@ -76,7 +85,7 @@ const MyComponent: React.FC = () => {
   return (
     <View style={styles.background}>
       <Modal
-        animationType="none" // Disable default animation
+        animationType="none"
         visible={modalVisible}
         onRequestClose={() => {
           setModalVisible(false);
@@ -116,7 +125,7 @@ const MyComponent: React.FC = () => {
                   styles.modalbutton,
 
                   difficulty == "easy" && {
-                    elevation: 10,
+                    borderWidth: 1,
                   },
                 ]}
                 onPress={() => setDifficulty("easy")}
@@ -128,7 +137,7 @@ const MyComponent: React.FC = () => {
                   styles.modalbutton,
 
                   difficulty == "medium" && {
-                    elevation: 10,
+                    borderWidth: 1,
                   },
                 ]}
                 onPress={() => setDifficulty("medium")}
@@ -140,7 +149,7 @@ const MyComponent: React.FC = () => {
                   styles.modalbutton,
 
                   difficulty == "hard" && {
-                    elevation: 10,
+                    borderWidth: 1,
                   },
                 ]}
                 onPress={() => {
@@ -203,7 +212,8 @@ const MyComponent: React.FC = () => {
                   padding: 10,
                   height: 80,
                   elevation: 5,
-                  borderRadius: 10,
+
+                  borderRadius: 24,
                 }}
                 title={category.name}
               />
@@ -220,7 +230,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   close: {
-    margin: 25,
+    margin: 20,
   },
   modalBackdrop: {
     flex: 1,
@@ -260,9 +270,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
     margin: 5,
     borderRadius: 12,
+    elevation: 10,
   },
   cardContainer: {
-    // Styles for the container of the cards
     flexDirection: "row",
     flexWrap: "wrap", // Allows cards to wrap to the next line
     justifyContent: "center", // Distribute space around the cards
@@ -270,9 +280,9 @@ const styles = StyleSheet.create({
   },
   cardWrapper: {
     marginRight: 10,
-    // Styles for the TouchableOpacity
-    // width: "50%", // Roughly half the screen width, adjust as needed
+
     marginBottom: 10, // Add spacing between cards
+    elevation: 10,
   },
 });
 

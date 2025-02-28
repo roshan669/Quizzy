@@ -14,6 +14,8 @@ interface PreferContextType {
   setData: React.Dispatch<React.SetStateAction<Question[]>>; // Type for setData
   score: number;
   setScore: React.Dispatch<React.SetStateAction<number>>;
+  url: string;
+  setUrl: React.Dispatch<React.SetStateAction<string>>;
 }
 
 const PreferContext = createContext<PreferContextType>({
@@ -21,6 +23,8 @@ const PreferContext = createContext<PreferContextType>({
   setData: () => {}, // Correct type for setData
   score: 0,
   setScore: () => {},
+  url: "",
+  setUrl: () => {},
 });
 
 export const PreferProvider: React.FC<{ children: ReactNode }> = ({
@@ -28,9 +32,12 @@ export const PreferProvider: React.FC<{ children: ReactNode }> = ({
 }) => {
   const [data, setData] = useState<Question[]>([]); // Use Question[] here as well
   const [score, setScore] = useState<number>(0);
+  const [url, setUrl] = useState<string>("");
 
   return (
-    <PreferContext.Provider value={{ data, setData, score, setScore }}>
+    <PreferContext.Provider
+      value={{ data, setData, score, setScore, url, setUrl }}
+    >
       {children}
     </PreferContext.Provider>
   );
